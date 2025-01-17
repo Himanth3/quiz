@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 10px solid;
+            border-image: linear-gradient(45deg, red, yellow, green, cyan, blue, magenta, red) 1;
+            animation: border-animation 3s infinite;
+        }
+
+        @keyframes border-animation {
+            0% {
+                border-image-source: linear-gradient(45deg, red, yellow, green, cyan, blue, magenta, red);
+            }
+            100% {
+                border-image-source: linear-gradient(405deg, red, yellow, green, cyan, blue, magenta, red);
+            }
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .options button:hover {
+            background: #0056b3;
+        }
+
+        .score {
+            font-size: 1.25rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz">
+            <div class="question" id="question">Question goes here</div>
+            <div class="options" id="options"></div>
+            <div class="score" id="score" style="display: none;">Your score: <span id="score-value"></span></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Who is Himanth's girlfriend?",
+            "Who is Himanth's friend?",
+            "Is Himanth a topper?",
+            "DO u have lover?"
+        ];
+
+        const options = [
+            ["a. No", "b. A", "c. B", "d. all🤫"],
+            ["a. naruto", "b. jinwoo", "c. Thanos", "d. Ironman"],
+            ["a. World's 1st", "b. Universe 1st", "c. Galaxy 1st", "d. LOL"],
+            ["a. 🌚", "b. 😉", "c. 😒", "d. 😊"]
+        ];
+
+        const answers = ["d", "d", "d", "d"];
+        let userGuesses = [];
+        let score = 0;
+        let currentQuestionIndex = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const scoreElement = document.getElementById("score");
+        const scoreValueElement = document.getElementById("score-value");
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion;
+            optionsElement.innerHTML = "";
+
+            options[currentQuestionIndex].forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => checkAnswer(option[0]));
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            userGuesses.push(selected);
+            if (selected === answers[currentQuestionIndex]) {
+                score++;
+                alert("CORRECT");
+            } else {
+                alert(`INCORRECT. The correct answer is ${answers[currentQuestionIndex]}`);
+            }
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            questionElement.style.display = "none";
+            optionsElement.style.display = "none";
+            scoreElement.style.display = "block";
+            scoreValueElement.textContent = `${score} / ${questions.length}`;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
